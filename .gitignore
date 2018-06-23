@@ -2,4 +2,4 @@ composer.lock
 vendor
 index.php
 typo3
-Tests
+/Tests

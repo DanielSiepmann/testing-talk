@@ -34,12 +34,25 @@ Links:
 Create first test
 -----------------
 
-We want to test the controller first::
+We want to test the model first::
 
    mkdir -p Tests/Unit/Domain/Model
    cp Resources/Private/CodeExamples/Tests/Unit/Domain/Model/AddressTest.php \
       Tests/Unit/Domain/Model/AddressTest.php
 
 Execute first test::
+
+   ./vendor/bin/phpunit Tests/Unit/
+
+Create test for controller
+--------------------------
+
+We want to test the controller now::
+
+   mkdir -p Tests/Unit/Controller
+   cp Resources/Private/CodeExamples/Tests/Unit/Controller/FrontendUserControllerTest.php \
+      Tests/Unit/Controller
+
+Execute all tests::
 
    ./vendor/bin/phpunit Tests/Unit/
