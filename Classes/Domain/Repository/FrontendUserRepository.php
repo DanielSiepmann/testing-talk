@@ -1,5 +1,5 @@
 <?php
-namespace Codappix\TestingTalk\Controller;
+namespace Codappix\Domain\Repository;
 
 /*
  * Copyright (C) 2018  Daniel Siepmann <coding@daniel-siepmann.de>
@@ -20,30 +20,8 @@ namespace Codappix\TestingTalk\Controller;
  * 02110-1301, USA.
  */
 
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
-use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
-/**
- * Lists and enables editing of frontend users.
- */
-class FrontendUserController extends ActionController
+class FrontendUserRepository extends Repository
 {
-    /**
-     * @var FrontendUserRepository
-     */
-    protected $frontendUserRepository;
-
-    public function indexAction()
-    {
-        $this->view->assign('frontendUsers', $this->frontendUserRepository->findAll());
-    }
-
-    /**
-     * @param FrontendUser $frontendUser
-     */
-    public function showAction(FrontendUser $frontendUser)
-    {
-        $this->view->assign('frontendUser', $frontendUser);
-    }
 }

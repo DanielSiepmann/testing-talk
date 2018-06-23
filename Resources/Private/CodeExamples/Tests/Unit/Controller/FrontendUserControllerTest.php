@@ -21,8 +21,10 @@ namespace Codappix\TestingTalkTests\Unit\Controller;
  */
 
 use Codappix\TestingTalk\Controller\FrontendUserController;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
@@ -33,24 +35,49 @@ class FrontendUserControllerTest extends TestCase
      */
     protected $subject;
 
+    /**
+     * @var MockObject
+     */
+    protected $viewMock;
+
     public function setUp()
     {
         $this->subject = new FrontendUserController();
+        $this->viewMock = $this->getMockBuilder(ViewInterface::class)->getMock();
+        ObjectAccess::setProperty($this->subject, 'view', $this->viewMock, true);
     }
 
     /**
      * @test
      */
-    public function providedFrontendUserIsAssignedToView()
+    public function providedFrontendUserIsAssignedToViewInShowAction()
     {
         $frontendUserMock = $this->getMockBuilder(FrontendUser::class)->getMock();
-        $viewMock = $this->getMockBuilder(ViewInterface::class)->getMock();
-        ObjectAccess::setProperty($this->subject, 'view', $viewMock, true);
 
-        $viewMock->expects($this->once())
+        $this->viewMock->expects($this->once())
             ->method('assign')
             ->with('frontendUser', $frontendUserMock);
 
         $this->subject->showAction($frontendUserMock);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchedFrontendUsersAreAssignedToViewInIndexAction()
+    {
+        $frontendUserRepositoryMock = $this->getMockBuilder(FrontendUserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        ObjectAccess::setProperty($this->subject, 'frontendUserRepository', $frontendUserRepositoryMock, true);
+        $frontendUserRepositoryMock->expects($this->any())
+            ->method('findAll')
+            ->willReturn(['user1' => 'test']);
+
+        $this->viewMock->expects($this->once())
+            ->method('assign')
+            ->with('frontendUsers', ['user1' => 'test']);
+
+        $this->subject->indexAction();
     }
 }
