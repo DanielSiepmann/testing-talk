@@ -3,3 +3,4 @@ vendor
 index.php
 typo3
 /Tests
+/Results
