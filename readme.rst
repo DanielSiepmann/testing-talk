@@ -1,29 +1,53 @@
 Testing Talk
 ============
 
+This is about automated testing, for PHP.
+
+Everyone is testing already, by hand. This involves:
+
+* Unit testing
+
+* Functional testing
+
+* Acceptance testing
+
+* Browser testing
+
+* …
+
+All of the above is already done by you, so … NO PANIC!
+
+
+This is "The Hitchhiker's Guide to […]" testing.
+
+Table of contents:
+
+.. contents:: :local:
+
+Start
+-----
+
 Clean everything::
 
-   rm -rf composer.lock vendor web Tests
+   rm -rf composer.lock vendor web Tests phpunit.xml.dist infection.json.dist
 
-Install dependencies
---------------------
+Install dependencies using composer::
 
-Using composer::
+   composer install --no-dev
+
+Installation development dependencies using composer::
 
    composer install
 
-PHPUnit Installation
---------------------
-
-Install phpunit::
-
-   composer require --dev phpunit/phpunit ^6.5
+This also includes composer, see: composer.json
 
 Why 6.x? We use 6.x to support PHP 7.0.
 
 Check installation::
 
    ./vendor/bin/phpunit --version
+
+   ./vendor/bin/phpunit Tests/Unit/
 
 Links:
 
@@ -46,6 +70,14 @@ Execute the first test::
 
    ./vendor/bin/phpunit Tests/Unit/
 
+Execute with colors::
+
+   ./vendor/bin/phpunit --color Tests/Unit/
+
+Execute with info about executed tests::
+
+   ./vendor/bin/phpunit --color --debug Tests/Unit/
+
 What's in the test?
 -------------------
 
@@ -65,6 +97,44 @@ Create test for controller
 Introduction to mocking
 ^^^^^^^^^^^^^^^^^^^^^^^
 
+What is mocking, or a mock?
+
+   In object-oriented programming, mock objects are simulated objects that mimic the
+   behavior of real objects in controlled ways.
+
+   A programmer typically creates a mock object to test the behavior of some other
+   object, in much the same way that a car designer uses a crash test dummy to
+   simulate the dynamic behavior of a human in vehicle impacts.
+
+   — https://en.wikipedia.org/wiki/Mock_object
+
+* https://phpunit.de/manual/6.5/en/test-doubles.html
+
+* https://en.wikipedia.org/wiki/Mock_object
+
+Example mock:
+
+.. code-block:: php
+
+   <?php
+
+   use PHPUnit\Framework\MockObject\MockObject;
+   use PHPUnit\Framework\TestCase;
+   use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+
+   class Test extends TestCase
+   {
+       public function someTest()
+       {
+           $viewMock = $this->getMockBuilder(ViewInterface::class)->getMock();
+
+           $viewMock->expects($this->once())
+               ->method('assign')
+               ->with('frontendUser', $frontendUserMock);
+       }
+   }
+
+   ?>
 
 Add the test
 ^^^^^^^^^^^^
@@ -77,7 +147,7 @@ We want to test the controller now::
 
 Execute all tests::
 
-   ./vendor/bin/phpunit Tests/Unit/
+   ./vendor/bin/phpunit --color --debug Tests/Unit/
 
 Alternative output
 ------------------
@@ -85,7 +155,7 @@ Alternative output
 testdox
    Used as "agile" output::
 
-      ./vendor/bin/phpunit Tests/Unit/ --testdox-html Results/testdox.html
+      ./vendor/bin/phpunit Tests/Unit/ --color --testdox-html Results/testdox.html
       xdg-open Results/testdox.html
 
 xml
@@ -101,3 +171,166 @@ html Coverage
 
 Benefits of tests
 -----------------
+
+#. Detect new bugs.
+
+#. Make sure the same bug does not occur a 2nd time.
+
+#. Reproduce bug.
+
+#. Speed up development.
+
+#. Show how to use the written code.
+
+#. Allow co-worker, in pull request, to see what you expect.
+   And how you understood the feature-request.
+
+#. Write code without working system, by using tests instead.
+
+#. Allow more secure refactoring.
+
+Automate test execution
+-----------------------
+
+Existing tests are great. If they are executed.
+
+Tests which exist are code, if they are not executed, they are dead code.
+
+Tests costs money, so get the money back by executing tests.
+
+The easiest way is to have an CI (=Continuous Integration).
+
+E.g.:
+
+* Jenkins
+
+* Travis
+
+* Gitlab CI
+
+* Bitbucket Pipelines
+
+* Bamboo
+
+* Circle CI
+
+* …
+
+See: https://awesomelists.top/#/repos/ciandcd/awesome-ciandcd
+
+Use `phpunit.xml.dist`::
+
+   cp Resources/Private/Configs/phpunit.xml.dist phpunit.xml.dist
+
+   ./vendor/bin/phpunit
+
+Metrics
+-------
+
+Code Coverage
+^^^^^^^^^^^^^
+
+Most of the time counts only number of executed lines.
+
+This helps to find untested code, nothing more!
+100% covered lines does not mean you are testing all circumstances,
+just every line at least once.
+
+E.g.:
+
+.. code-block:: php
+
+   <?php
+
+       if ($var1 || $var2) {
+           echo 'test';
+       }
+
+   ?>
+
+Will have 100% if all lines are executed, that is even if we do not provide `$var2`.
+We have to test the possible cases, not only all lines.
+
+* https://stackoverflow.com/a/90021/1888377
+
+* https://www.martinfowler.com/bliki/TestCoverage.html
+
+* https://phpunit.de/manual/6.5/en/code-coverage-analysis.html
+
+Crap
+^^^^
+
+Is not:
+
+   https://img.devrant.com/devrant/rant/r_1046201_T68wf.jpg
+
+   — https://devrant.com/search?term=code+reviews
+
+
+Is: change risk anti pattern score
+   Combines complexity and test coverage.
+
+Different kinds of tests
+------------------------
+
+* https://stackoverflow.com/a/4145576/1888377
+
+* http://www.getlaura.com/testing-unit-vs-integration-vs-regression-vs-acceptance/
+
+* https://en.wikipedia.org/wiki/Category:Software_testing
+  Lists: Acid tests, Unit testing, A/B testing, Acceptance testing, Ad hoc testing,
+  Agile testing, All-pairs testing, API testing, Black-box testing & White-box
+  testing, Boundary testing, Cloud testing, Compatibility testing, Component-based
+  usability testing, …
+
+Unit Tests
+^^^^^^^^^^
+
+What we did above. White box test of small pieces of code.
+
+Functional Tests
+^^^^^^^^^^^^^^^^
+
+Involves multiple code parts, database, file system and further components, e.g. web
+server.
+
+Acceptance Tests
+^^^^^^^^^^^^^^^^
+
+Tests from user view, e.g. via browser.
+
+Mutation testing
+^^^^^^^^^^^^^^^^
+
+Tests how easy it is to break test::
+
+   cp Resources/Private/Configs/infection.json.dist infection.json.dist
+
+   ./vendor/bin/infection
+
+* https://infection.github.io/
+
+* https://infection.github.io/guide/mutators.html
+
+* https://en.wikipedia.org/wiki/Mutation_testing
+
+Summary
+-------
+
+Start writing tests, small unit tests.
+
+Automate execution of tests.
+
+Improve.
+
+Further reading
+---------------
+
+* https://phpunit.de/
+
+* https://awesomelists.top/#repos/ziadoz/awesome-php
+
+* https://en.wikipedia.org/wiki/Category:Software_testing
+
+* Source code of open source projects, like TYPO3:
+  https://github.com/TYPO3/TYPO3.CMS/tree/master/typo3/sysext/core/Tests

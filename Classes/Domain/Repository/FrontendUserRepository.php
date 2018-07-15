@@ -1,5 +1,5 @@
 <?php
-namespace Codappix\Domain\Repository;
+namespace Codappix\TestingTalk\Domain\Repository;
 
 /*
  * Copyright (C) 2018  Daniel Siepmann <coding@daniel-siepmann.de>

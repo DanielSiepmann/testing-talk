@@ -4,3 +4,8 @@ index.php
 typo3
 /Tests
 /Results
+infection*
+phpunit.xml.dist
+debug-log.txt
+per-mutator.md
+summary-log.txt

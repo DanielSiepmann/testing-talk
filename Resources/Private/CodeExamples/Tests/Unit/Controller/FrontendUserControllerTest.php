@@ -1,5 +1,5 @@
 <?php
-namespace Codappix\TestingTalkTests\Unit\Controller;
+namespace Codappix\TestingTalk\Tests\Unit\Controller;
 
 /*
  * Copyright (C) 2018  Daniel Siepmann <coding@daniel-siepmann.de>

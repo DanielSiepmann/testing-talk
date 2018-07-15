@@ -21,5 +21,9 @@
         "typo3/cms": {
             "web-dir": "web"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5",
+        "infection/infection": "^0.9.0"
     }
 }
