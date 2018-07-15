@@ -27,25 +27,28 @@ Table of contents:
 Start
 -----
 
+Execute the following::
+
+   git clone https://github.com/DanielSiepmann/testing-talk.git
+   cd testing-talk
+
 Clean everything::
 
    rm -rf composer.lock vendor web Tests phpunit.xml.dist infection.json.dist
-
-Install dependencies using composer::
-
-   composer install --no-dev
 
 Installation development dependencies using composer::
 
    composer install
 
-This also includes composer, see: composer.json
+This also includes PHPUnit, see: composer.json
 
-Why 6.x? We use 6.x to support PHP 7.0.
+We use 6.x to support PHP 7.0.
 
 Check installation::
 
    ./vendor/bin/phpunit --version
+
+This would not work yet, as we do not have any tests::
 
    ./vendor/bin/phpunit Tests/Unit/
 
@@ -325,6 +328,8 @@ Improve.
 
 Further reading
 ---------------
+
+* https://github.com/DanielSiepmann/testing-talk/tree/develop
 
 * https://phpunit.de/
 
