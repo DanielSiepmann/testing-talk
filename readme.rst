@@ -34,7 +34,7 @@ Execute the following::
 
 Clean everything::
 
-   rm -rf composer.lock vendor web Tests phpunit.xml.dist infection.json.dist
+   rm -rf composer.lock vendor web Tests phpunit.xml.dist infection.json.dist Results
 
 Installation development dependencies using composer::
 
@@ -87,6 +87,8 @@ What's in the test?
 -------------------
 
 #. We have one PHP class `AddressTest`.
+
+#. The class and file ends with `Test`.
 
 #. Two public methods.
 
@@ -193,6 +195,8 @@ Benefits of tests
 #. Write code without working system, by using tests instead.
 
 #. Allow more secure refactoring.
+
+#. Forces to write clean code.
 
 Automate test execution
 -----------------------
