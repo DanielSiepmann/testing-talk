@@ -40,7 +40,7 @@ class FrontendUserControllerTest extends TestCase
      */
     protected $viewMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->subject = new FrontendUserController();
         $this->viewMock = $this->getMockBuilder(ViewInterface::class)->getMock();

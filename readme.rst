@@ -42,8 +42,6 @@ Installation development dependencies using composer::
 
 This also includes PHPUnit, see: composer.json
 
-We use 6.x to support PHP 7.0.
-
 Check installation::
 
    ./vendor/bin/phpunit --version
@@ -57,6 +55,10 @@ Links:
 * https://phpunit.de/
 
 * https://packagist.org/packages/phpunit/phpunit
+
+.. note::
+
+   The concrete PHPUnit version also depends on your current PHP Version.
 
 Create first test
 -----------------
