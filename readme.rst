@@ -130,7 +130,7 @@ We want to test the controller now::
 
 Execute all tests::
 
-   ./vendor/bin/phpunit --color --debug Tests/Unit/
+   ./vendor/bin/phpunit --color Tests/Unit/
 
 Alternative output
 ------------------
@@ -157,11 +157,11 @@ Benefits of tests
 
 #. Detect new bugs.
 
-#. Make sure the same bug does not occur a 2nd time.
-
 #. Reproduce bug.
 
 #. Speed up development.
+
+#. Make sure the same bug does not occur a 2nd time.
 
 #. Show how to use the written code.
 
