@@ -119,30 +119,6 @@ What is mocking, or a mock?
 
 * https://en.wikipedia.org/wiki/Mock_object
 
-Example mock:
-
-.. code-block:: php
-
-   <?php
-
-   use PHPUnit\Framework\MockObject\MockObject;
-   use PHPUnit\Framework\TestCase;
-   use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-
-   class Test extends TestCase
-   {
-       public function someTest()
-       {
-           $viewMock = $this->getMockBuilder(ViewInterface::class)->getMock();
-
-           $viewMock->expects($this->once())
-               ->method('assign')
-               ->with('frontendUser', $frontendUserMock);
-       }
-   }
-
-   ?>
-
 Add the test
 ^^^^^^^^^^^^
 

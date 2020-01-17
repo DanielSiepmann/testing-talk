@@ -21,8 +21,8 @@ namespace Codappix\TestingTalk\Tests\Unit\Controller;
  */
 
 use Codappix\TestingTalk\Controller\FrontendUserController;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -36,15 +36,15 @@ class FrontendUserControllerTest extends TestCase
     protected $subject;
 
     /**
-     * @var MockObject
+     * @var ObjectProphecy
      */
-    protected $viewMock;
+    protected $view;
 
     public function setUp(): void
     {
         $this->subject = new FrontendUserController();
-        $this->viewMock = $this->getMockBuilder(ViewInterface::class)->getMock();
-        ObjectAccess::setProperty($this->subject, 'view', $this->viewMock, true);
+        $this->view = $this->prophesize(ViewInterface::class);
+        ObjectAccess::setProperty($this->subject, 'view', $this->view->reveal(), true);
     }
 
     /**
@@ -52,13 +52,13 @@ class FrontendUserControllerTest extends TestCase
      */
     public function providedFrontendUserIsAssignedToViewInShowAction()
     {
-        $frontendUserMock = $this->getMockBuilder(FrontendUser::class)->getMock();
+        $frontendUser = $this->prophesize(FrontendUser::class);
 
-        $this->viewMock->expects($this->once())
-            ->method('assign')
-            ->with('frontendUser', $frontendUserMock);
+        $this->view
+            ->assign('frontendUser', $frontendUser->reveal())
+            ->shouldBeCalled();
 
-        $this->subject->showAction($frontendUserMock);
+        $this->subject->showAction($frontendUser->reveal());
     }
 
     /**
@@ -66,17 +66,16 @@ class FrontendUserControllerTest extends TestCase
      */
     public function fetchedFrontendUsersAreAssignedToViewInIndexAction()
     {
-        $frontendUserRepositoryMock = $this->getMockBuilder(FrontendUserRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        ObjectAccess::setProperty($this->subject, 'frontendUserRepository', $frontendUserRepositoryMock, true);
-        $frontendUserRepositoryMock->expects($this->any())
-            ->method('findAll')
-            ->willReturn(['user1' => 'test']);
+        $frontendUserRepository = $this->prophesize(FrontendUserRepository::class);
+        ObjectAccess::setProperty($this->subject, 'frontendUserRepository', $frontendUserRepository->reveal(), true);
+        $frontendUserRepository
+            ->findAll()
+            ->willReturn(['user1' => 'test'])
+            ->shouldBeCalled();
 
-        $this->viewMock->expects($this->once())
-            ->method('assign')
-            ->with('frontendUsers', ['user1' => 'test']);
+        $this->view
+            ->assign('frontendUsers', ['user1' => 'test'])
+            ->shouldBeCalled();
 
         $this->subject->indexAction();
     }
