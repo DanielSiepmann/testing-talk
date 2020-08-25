@@ -1,4 +1,5 @@
 <?php
+
 namespace Codappix\TestingTalk\Tests\Unit\Controller;
 
 /*
@@ -22,6 +23,7 @@ namespace Codappix\TestingTalk\Tests\Unit\Controller;
 
 use Codappix\TestingTalk\Controller\FrontendUserController;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
@@ -30,6 +32,8 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 class FrontendUserControllerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var FrontendUserController
      */
@@ -44,7 +48,7 @@ class FrontendUserControllerTest extends TestCase
     {
         $this->subject = new FrontendUserController();
         $this->view = $this->prophesize(ViewInterface::class);
-        ObjectAccess::setProperty($this->subject, 'view', $this->view->reveal(), true);
+        $this->setProperty($this->subject, 'view', $this->view->reveal());
     }
 
     /**
@@ -67,7 +71,7 @@ class FrontendUserControllerTest extends TestCase
     public function fetchedFrontendUsersAreAssignedToViewInIndexAction()
     {
         $frontendUserRepository = $this->prophesize(FrontendUserRepository::class);
-        ObjectAccess::setProperty($this->subject, 'frontendUserRepository', $frontendUserRepository->reveal(), true);
+        $this->setProperty($this->subject, 'frontendUserRepository', $frontendUserRepository->reveal());
         $frontendUserRepository
             ->findAll()
             ->willReturn(['user1' => 'test'])
@@ -78,5 +82,14 @@ class FrontendUserControllerTest extends TestCase
             ->shouldBeCalled();
 
         $this->subject->indexAction();
+    }
+
+    private function setProperty($object, string $propertyName, $value): void
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+
+        $reflectionProperty = $reflectionClass->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
     }
 }

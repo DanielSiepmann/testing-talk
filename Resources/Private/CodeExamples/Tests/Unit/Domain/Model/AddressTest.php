@@ -1,4 +1,5 @@
 <?php
+
 namespace Codappix\TestingTalk\Tests\Unit\Domain\Model;
 
 /*
