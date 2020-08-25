@@ -191,7 +191,7 @@ E.g.:
 
 * Travis
 
-* Gitlab CI
+* GitLab CI
 
 * Bitbucket Pipelines
 
